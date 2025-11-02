@@ -1,4 +1,4 @@
-# UniDisc의 Interleaved 구조 — 코드 기반 상세 분석
+# UniDisc의 Interleaved 구조 — 코드 기반 상세 분석 (BOI 토큰 근거 포함)
 
 ## 1. 개요
 
@@ -30,7 +30,7 @@ class InterleavedBatch:
 
 ---
 
-### 2.1 `to_ragged_batch()`
+### 2.1 data_defs.py `to_ragged_batch()`
 
 ```python
 batch_indices, start_positions, end_positions = get_contiguous_blocks(self.sample_ids)
@@ -46,7 +46,7 @@ for i in range(batch_indices.shape[0]):
 
 ---
 
-### 2.2 `to_elements()`
+### 2.2  data_defs.py  `to_elements()`
 
 ```python
 data = self.to_ragged_batch()
@@ -80,7 +80,7 @@ class InterleavedElement:
 
 ---
 
-### 3.1 `from_raw()`
+### 3.1  data_defs.py `from_raw()`
 
 ```python
 batch_indices, start_positions, end_positions = get_contiguous_blocks(interleaved_batch.modality[None])
@@ -106,7 +106,7 @@ for i in range(batch_indices.shape[0]):
 
 ---
 
-### 3.2 `to_list()`
+### 3.2 data_defs.py `to_list()`
 
 ```python
 while txt_idx < len(self.txt_input_ids) or img_idx < len(self.img_input_ids):
@@ -145,13 +145,61 @@ while txt_idx < len(self.txt_input_ids) or img_idx < len(self.img_input_ids):
 
 ---
 
-## 5. 코드 기반 결론
+## 5. BOI(`<image>`) 토큰 예측 근거
 
-UniDisc의 `InterleavedBatch` 및 `InterleavedElement`는 단순히 멀티모달 데이터를 합치는 수준이 아니라,
-데이터 레벨에서 **텍스트와 이미지가 번갈아(interleaved) 등장하는 구조**를 명시적으로 보장한다.
+UniDisc는 `<image>`(BOI) 토큰을 **직접 예측 대상**으로 포함한다. 이는 interleaved 구조의 핵심 신호이자, 모델이 텍스트에서 이미지로 전환하는 시점을 인식하게 한다.
 
-* `InterleavedBatch`  → interleaved 데이터 묶음을 관리하고 샘플 단위로 분리
-* `InterleavedElement` → 텍스트/이미지 블록을 분리하고 interleaving 관계(`img_pos_ids`)를 유지
-* `to_list()` → 텍스트-이미지 순서를 복원하여 모델이 교차적 생성이 가능한 입력을 구성
+### 근거 1 — `model_eval.py` 내 문자열 기반 삽입 코드
 
-이로써 UniDisc는 **“텍스트와 이미지를 하나의 시퀀스 안에서 번갈아 생성할 수 있는 데이터 구조”**를 실제 코드 수준에서 구현하고 있음을 확인할 수 있다.
+```python
+if img_first:
+    dec_txt = ['<image> ' + txt for txt in dec_txt]
+else:
+    dec_txt = [txt + ' <image>' for txt in dec_txt]
+```
+
+이 구문은 모델이 생성하는 텍스트 샘플에 `<image>` 토큰을 명시적으로 포함시키는 부분으로,
+모델이 해당 토큰을 예측하고 시퀀스 내 위치를 복원해야 함을 의미한다【52:0†model_eval.py†L24-L28】.
+
+---
+
+### 근거 2 — `get_interleaved_block_mask()` 호출부
+
+```python
+if self.config.trainer.interleaved_training_flex_attention:
+    kwargs['block_mask'] = get_interleaved_block_mask(kwargs['sample_ids'], x.shape[0], x.shape[-1], self.device)
+```
+
+이 부분은 interleaved block 단위(즉, 텍스트 + `<image>` + 이미지 토큰 전체)를 마스크 및 복원 대상으로 지정하는 코드이다.
+따라서 `<image>` 토큰도 diffusion 타깃(예측 대상)에 포함된다【52:1†model_eval.py†L34-L37】.
+
+---
+
+### 근거 3 — `x0_unmask` 및 `image_indices` 로직
+
+```python
+_img_indices = torch.isin(x0, torch.tensor(list(image_indices), device=self.device))
+x0_unmask |= (~_img_indices)
+```
+
+이 로직은 이미지 관련 토큰(즉, `<image>` 및 이미지 콘텐츠 토큰)을 구분하여 마스킹/언마스킹을 수행한다.
+이는 `<image>` 토큰이 단순 구분자가 아닌 예측 가능한 토큰임을 보여준다【52:1†model_eval.py†L15-L25】.
+
+---
+
+### 근거 4 — Joint diffusion 설계
+
+`model_eval.py` 전반의 샘플링 루프(`_sample()` 및 `_ar_sampler`)는 모든 `input_ids`를 대상으로 노이즈-복원(diffusion) 과정을 수행하며,
+텍스트/이미지 토큰의 구분은 `modality`를 통해서만 이뤄진다. 따라서 `<image>` 토큰 역시 동일한 예측 과정에 포함된다.
+
+---
+
+## 6. 결론
+
+| 구분            | 설명                                                                |
+| ------------- | ----------------------------------------------------------------- |
+| **BOI 포함 여부** | 포함됨 — `<image>`는 모델이 직접 예측하는 토큰                                   |
+| **근거 파일**     | `model_eval.py`, `tensor_utils.py` (`get_interleaved_block_mask`) |
+| **핵심 함수**     | `_sample()`, `get_interleaved_block_mask()`, `decode_latents()`   |
+| **학습 메커니즘**   | joint diffusion을 통해 `<image>` 위치 및 이미지 내용을 동시에 복원                 |
+| **의미**        | UniDisc는 “이미지 시작 위치까지 예측하는 멀티모달 생성”을 수행함                          |
