@@ -16,7 +16,7 @@
 - Orthus : https://github.com/zhijie-group/Orthus
 - SynerGen-VL : https://github.com/cpsxhao/SynerGen-VL
 - Liquid : https://github.com/FoundationVision/Liquid
-- UGen : (Not available yet - arxiv:2503.21193)
+- UGen : https://github.com/jbinko/UGEN
 - Harmon : https://github.com/wusize/Harmon
 - TokLIP : https://github.com/TencentARC/TokLIP
 - Selftok : https://github.com/selftok-team/SelftokTokenizer
@@ -27,65 +27,65 @@
 - DreamLLM : https://github.com/RunpeiDong/DreamLLM
 - Emu2 : https://github.com/baaivision/Emu
 - VL-GPT : https://github.com/AILab-CVC/VL-GPT
-- MM-Interleaved :
+- MM-Interleaved : https://github.com/OpenGVLab/MM-Interleaved
 - Mini-Gemini : https://github.com/dvlab-research/MiniGemini
 - VILA-U : https://github.com/mit-han-lab/vila-u
-- PUMA :
-- MetaMorph :
+- PUMA : https://github.com/rongyaofang/PUMA
+- MetaMorph : https://github.com/facebookresearch/metamorph
 - ILLUME : https://github.com/illume-unified-mllm/ILLUME_plus
 - UniTok : https://github.com/FoundationVision/UniTok
-- QLIP :
-- DualToken :
-- UniFork :
-- UniCode2 :
-- UniWorld :
-- Pisces :
-- Tar :
-- OmniGen2 :
-- Ovis-U1 :
-- X-Omni :
-- Qwen-Image :
-- Bifrost-1 :
+- QLIP : https://github.com/NVlabs/QLIP/tree/main
+- DualToken : X 
+- UniFork : https://github.com/tliby/UniFork
+- UniCode2 : X
+- UniWorld : https://github.com/PKU-YuanGroup/UniWorld
+- Pisces :  X
+- Tar : X
+- OmniGen2 : https://github.com/VectorSpaceLab/OmniGen2
+- Ovis-U1 : https://github.com/AIDC-AI/Ovis-U1
+- X-Omni : https://github.com/X-Omni-Team/X-Omni
+- Qwen-Image : https://github.com/ModelTC/Qwen-Image-Lightning
+- Bifrost-1 : https://github.com/HL-hanlin/Bifrost-1
 
 ## Autoregressive Model - Type b-3 (Learnable Query)
 - SEED : https://github.com/AILab-CVC/SEED
 - SEED-LLaMA : https://github.com/AILab-CVC/SEED
 - SEED-X : https://github.com/AILab-CVC/SEED-X
-- MetaQueries :
-- Nexus-Gen :
-- Ming-Lite-Uni :
-- BLIP3-o :
-- OpenUni :
-- Ming-Omni :
-- UniLIP :
-- TBAC-UniImage :
-
+- MetaQueries : https://github.com/facebookresearch/metaquery
+- Nexus-Gen : https://github.com/modelscope/Nexus-Gen
+- Ming-Lite-Uni : X
+- BLIP3-o : https://github.com/JiuhaiChen/BLIP3o
+- OpenUni : X
+- Ming-Omni : https://github.com/inclusionAI/Ming
+- UniLIP : X
+- TBAC-UniImage :https://huggingface.co/TencentBAC/TBAC-UniImage-3B
+ 
 ## Autoregressive Model - Type b-4 (Dual Path - Janus-like)
 - Janus : https://github.com/deepseek-ai/Janus
 - Janus-Pro : https://github.com/deepseek-ai/Janus
-- OmniMamba :
-- Unifluid :
-- MindOmni :
-- Skywork UniPic :
+- OmniMamba : https://github.com/hustvl/OmniMamba
+- Unifluid : X
+- MindOmni : https://github.com/TencentARC/MindOmni
+- Skywork UniPic : https://github.com/SkyworkAI/UniPic
 
 ## Autoregressive Model - Type b-5 (Hybrid Approaches)
-- MUSE-VL :
-- Tokenflow :
-- VARGPT :
-- SemHiTok :
-- VARGPT-1.1 :
+- MUSE-VL : X
+- Tokenflow : https://github.com/omerbt/TokenFlow
+- VARGPT : https://github.com/VARGPT-family/VARGPT
+- SemHiTok : X
+- VARGPT-1.1 : https://github.com/VARGPT-family/VARGPT-v1.1
 - ILLUME+ : https://github.com/illume-unified-mllm/ILLUME_plus
-- UniToken :
-- Show-o2 :
+- UniToken : https://github.com/stephantul/unitoken
+- Show-o2 : https://github.com/showlab/Show-o
 
 ## Fused Autoregressive and Diffusion Model
 - Transfusion : https://github.com/lucidrains/transfusion-pytorch
 - Show-o : https://github.com/showlab/Show-o
-- MonoFormer :
-- LMFusion :
+- MonoFormer : https://github.com/sjg02122/MonoFormer
+- LMFusion : X
 - Janus-flow : https://github.com/deepseek-ai/Janus
-- Mogao :
-- BAGEL :
+- Mogao : X
+- BAGEL : https://github.com/ByteDance-Seed/Bagel
 
 ---
 
