@@ -1,4 +1,4 @@
-# UniDisc의 Interleaved 구조 — 코드 기반 상세 분석 (BOI 토큰 근거 포함)
+# UniDisc
 
 ## 1. 개요
 
@@ -203,3 +203,4 @@ x0_unmask |= (~_img_indices)
 | **핵심 함수**     | `_sample()`, `get_interleaved_block_mask()`, `decode_latents()`   |
 | **학습 메커니즘**   | joint diffusion을 통해 `<image>` 위치 및 이미지 내용을 동시에 복원                 |
 | **의미**        | UniDisc는 “이미지 시작 위치까지 예측하는 멀티모달 생성”을 수행함                          |
+
