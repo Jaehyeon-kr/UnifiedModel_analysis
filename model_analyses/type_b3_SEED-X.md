@@ -518,11 +518,11 @@ SEED-X는 **Learnable Query 방식의 대표적인 구현**입니다:
 | 특징 | SEED-X | Chameleon | Janus |
 |------|--------|-----------|-------|
 | 토큰 방식 | Learnable Query (64) | Discrete VQ (1024) | VQ-VAE (8192) |
-| BOI 예측 | ⚠️ 제한적 | ✅ 완전 자동 | ❌ 불가능 |
+| BOI 예측 | ⚠️ 제한적 | ✅ 완전 자동 | ⚠️ 제한적  |
 | Interleaved | ⚠️ 이론적 가능, 실용적 제한 | ✅ 완전 자동 | ❌ 불가능 |
 | 이미지 품질 | ✅ SDXL 기반 고품질 | ⚠️ VQ-VAE 기반 | ⚠️ VQ-VAE 기반 |
 | 생성 속도 | ✅ 빠름 (64 토큰) | ⚠️ 느림 (1024 토큰) | ⚠️ 느림 (8192 토큰) |
-| 해상도 | ✅ Any-Resolution | ❌ 고정 (256x256) | ❌ 고정 (256x256) |
+| 해상도 | ✅ Any-Resolution | ❌ 고정 (256x256) | ✅ Any-Resolution|
 
 ### 핵심 설계 원칙
 
